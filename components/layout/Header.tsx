@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -383,7 +382,6 @@ export default function Header() {
   const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null)
   const [animationClass, setAnimationClass] = useState<string>("")
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -439,15 +437,6 @@ export default function Header() {
     }, 150)
   }
 
-  // Add handler for when mouse leaves entire header
-  const handleHeaderMouseLeave = () => {
-    setIsNavHovered(false)
-    if (currentOpenMenu) {
-      setCurrentOpenMenu(null)
-      document.body.classList.remove('no-scroll')
-    }
-  }
-
   const getMenuAnimationClass = (menuTitle: string) => {
     if (currentOpenMenu === menuTitle) {
       return animationClass
@@ -457,7 +446,16 @@ export default function Header() {
   
   return (
     <>
-      <header className="sticky top-0 p-[0.625rem] z-50 w-full bg-none transition-colors duration-300">
+      <header 
+        className="sticky top-0 p-[0.625rem] z-50 w-full bg-none transition-colors duration-300"
+        onMouseLeave={() => {
+          setIsNavHovered(false)
+          if (currentOpenMenu) {
+            setCurrentOpenMenu(null)
+            document.body.classList.remove('no-scroll')
+          }
+        }}
+      >
         <div className={cn(
           "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500",
           isScrolled 

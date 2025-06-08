@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 
-export default function Logo({ isScrolled }: { isScrolled?: boolean }) {
+interface LogoProps {
+  isScrolled?: boolean
+}
+
+export default function Logo({ isScrolled }: LogoProps) {
   return (
     <div className="flex items-center relative">
       {/* Logo icon */}
