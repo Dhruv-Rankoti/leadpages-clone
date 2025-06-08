@@ -1,0 +1,209 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 210 100% 40%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 210 100% 40%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 100% 40%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 210 100% 40%;
+  }
+}
+
+@layer base {
+  body {
+    background-color: #0d0714;
+  }
+}
+
+/* Default dropdown rotation animation */
+@keyframes dropdownRotateIn {
+  from {
+    opacity: 0;
+    transform-origin: top;
+    transform: perspective(1000px) rotateX(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform-origin: top;
+    transform: perspective(1000px) rotateX(0);
+  }
+}
+
+/* Slide in from left animation */
+@keyframes slideFromLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from right animation */
+@keyframes slideFromRight {
+  0% {
+    opacity: 1;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Sliding animation for company logos */
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Scroll animation for seamless rotation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50%));
+  }
+}
+
+/* Logo stretch animation */
+@keyframes logo-stretch {
+  0% {
+    transform: scale(1) skew(0);
+  }
+  100% {
+    transform: scale(1.1) skew(0);
+  }
+}
+
+/* Slide animation classes */
+.animate-slide {
+  animation: slide 60s linear infinite;
+} 
+
+/* Scroll animation classes */
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+/* Default dropdown container */
+.dropdown-container {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  opacity: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-content {
+  width: 100%;
+  height: 100%;
+}
+
+/* Animation classes */
+.dropdown-rotate {
+  animation: dropdownRotateIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-from-left .dropdown-content {
+  animation: slideFromLeft 0.2s ease-out forwards;
+}
+
+.slide-from-right .dropdown-content {
+  animation: slideFromRight 0.2s ease-out forwards;
+}
+
+.nav-link-hover {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  background-color: white;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+.logo-hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo-hover:hover {
+  transform: scale(1.1);
+}
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply --background --accent-foreground;
+  }
+} */
+
+.company-scroll {
+  width: fit-content;
+  display: flex;
+  gap: 2rem;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
