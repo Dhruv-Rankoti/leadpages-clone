@@ -13,7 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { Menu, X, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import Logo from "@/components/ui/Logo"
 
 type Section = {
@@ -377,10 +377,12 @@ const navItems: {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isNavHovered, setIsNavHovered] = useState(false)
   const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null)
   const [animationClass, setAnimationClass] = useState<string>("")
+  const [isClosing, setIsClosing] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -444,6 +446,19 @@ export default function Header() {
     return ""
   }
   
+  // Add handler for mobile submenu
+  const handleMobileSubmenu = (title: string) => {
+    setMobileSubmenu(mobileSubmenu === title ? null : title)
+  }
+
+  const handleMobileMenuClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      setMobileMenuOpen(false)
+      setIsClosing(false)
+    }, 200)
+  }
+
   return (
     <>
       <header 
@@ -612,45 +627,222 @@ export default function Header() {
               </Button>
             </Link>
           </div>
+          {/* Replace the Menu/X icons with custom hamburger */}
           <button 
-            className="flex items-center md:hidden" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center md:hidden menu-btn"
+            onClick={() => mobileMenuOpen ? handleMobileMenuClose() : setMobileMenuOpen(true)}
           >
-            {mobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
+            <div className={cn("hamburger-icon", mobileMenuOpen && "active")}>
+              <span></span>
+              <span></span>
+            </div>
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        <style jsx>{`
+          @keyframes cardFadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(-8px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes cardFadeOut {
+            from {
+              opacity: 1;
+              transform: translateY(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateY(-8px);
+            }
+          }
+
+          .mobile-menu-card {
+            animation: cardFadeIn 0.2s ease-out forwards;
+          }
+
+          .mobile-menu-card.closing {
+            animation: cardFadeOut 0.2s ease-in forwards;
+          }
+
+          @keyframes navItemSlide {
+            from {
+              opacity: 0;
+              transform: translateY(-8px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes navItemSlideOut {
+            from {
+              opacity: 1;
+              transform: translateY(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateY(-8px);
+            }
+          }
+
+          @keyframes buttonSlide {
+            from {
+              opacity: 0;
+              transform: translateY(-60vh);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes buttonSlideOut {
+            from {
+              opacity: 1;
+              transform: translateY(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateY(-60vh);
+            }
+          }
+
+          .nav-item {
+            opacity: 0;
+            animation: navItemSlide 0.3s ease-out forwards;
+          }
+
+          .nav-item.closing {
+            animation: navItemSlideOut 0.2s ease-in forwards;
+          }
+
+          .menu-buttons {
+            animation: buttonSlide 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            position: relative;
+          }
+
+          .menu-buttons.closing {
+            animation: buttonSlideOut 0.2s ease-in forwards;
+          }
+
+          /* Custom Hamburger Icon */
+          .hamburger-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+          }
+
+          .hamburger-icon span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: white;
+            transition: all 0.3s ease;
+            position: absolute;
+            left: 0;
+          }
+
+          .hamburger-icon span:first-child {
+            transform: translateY(-4px);
+          }
+
+          .hamburger-icon span:last-child {
+            transform: translateY(4px);
+          }
+
+          .hamburger-icon.active span:first-child {
+            transform: rotate(45deg) translateY(0);
+          }
+
+          .hamburger-icon.active span:last-child {
+            transform: rotate(-45deg) translateY(0);
+          }
+        `}</style>
+
         {mobileMenuOpen && (
-          <div className="fixed inset-0 top-[4.5rem] bg-[#0d0714] z-50 md:hidden">
-            <div className="p-4 space-y-4">
-              {navItems.map((item) => (
-                <div key={item.title} className="border-b border-gray-800 pb-4">
-                  {item.children ? (
-                    <>
-                      <div className="flex items-center justify-between text-white mb-2">
-                        <span className="text-lg font-medium">{item.title}</span>
-                        <ChevronRight className="h-5 w-5" />
+          <div className="container mx-auto">
+            <div className={cn(
+              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/90 backdrop-blur-md z-50 md:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
+              isClosing && "closing"
+            )}>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Main navigation items */}
+                {navItems.map((item, index) => (
+                  <div 
+                    key={item.title} 
+                    className={cn("nav-item border-b border-gray-800 pb-4 last:border-b-0", isClosing && "closing")}
+                    style={{ 
+                      animationDelay: isClosing 
+                        ? `${(navItems.length - index - 1) * 50}ms` 
+                        : `${index * 75}ms` 
+                    }}
+                  >
+                    {item.children ? (
+                      <div>
+                        <div 
+                          className="flex items-center justify-between text-white cursor-pointer"
+                          onClick={() => handleMobileSubmenu(item.title)}
+                        >
+                          <span className="text-lg font-medium">{item.title}</span>
+                          <ChevronRight className={cn(
+                            "h-5 w-5 transition-transform duration-200",
+                            mobileSubmenu === item.title ? "rotate-90" : ""
+                          )} />
+                        </div>
+                        {mobileSubmenu === item.title && (
+                          <div className="mt-4 space-y-6 pl-4 submenu-animate">
+                            {item.children.map((section) => (
+                              <div key={section.title} className="space-y-3">
+                                {section.isSection && section.title && (
+                                  <h3 className="text-sm font-semibold text-gray-400 uppercase">{section.title}</h3>
+                                )}
+                                <div className="space-y-3">
+                                  {section.items.map((subItem) => (
+                                    <Link
+                                      key={subItem.title}
+                                      href={subItem.href}
+                                      className="flex items-center text-white hover:text-gray-300"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      {subItem.icon && <span className="mr-2">{subItem.icon}</span>}
+                                      <span>{subItem.title}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-400">
-                        {item.title === "Platform" && "Create high-converting landing pages"}
-                        {item.title === "Solutions" && "Find the right solution for your needs"}
-                        {item.title === "Templates" && "Start with pre-built templates"}
-                        {item.title === "Resources" && "Learn and grow with our resources"}
-                      </p>
-                    </>
-                  ) : (
-                    <Link 
-                      href={item.href}
-                      className="text-lg font-medium text-white block"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.title}
-                    </Link>
-                  )}
-                </div>
-              ))}
-              <div className="pt-4 space-y-3">
+                    ) : (
+                      <Link 
+                        href={item.href}
+                        className="text-lg font-medium text-white block"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.title}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Auth buttons with animation matching submenu */}
+              <div className={cn(
+                "p-4 pt-6 border-t border-gray-800 bg-[#0d0714]/95 space-y-4 menu-buttons",
+                isClosing && "closing"
+              )}>
                 <Button variant="outline" className="w-full justify-center text-white border-gray-700">
                   Log In
                 </Button>
@@ -663,11 +855,11 @@ export default function Header() {
         )}
       </header>
       
-      {/* Blur overlay - Only show on desktop */}
-      {!mobileMenuOpen && (
+      {/* Blur overlay */}
+      {(!mobileMenuOpen && !isNavHovered) ? null : (
         <div className={cn(
-          "fixed inset-0 bg-background/80 backdrop-blur-[6px] transition-all duration-300 hidden md:block",
-          isNavHovered ? "opacity-100 z-40" : "opacity-0 pointer-events-none"
+          "fixed inset-0 bg-background/80 backdrop-blur-[6px] transition-all duration-300",
+          isNavHovered ? "opacity-100 z-40" : mobileMenuOpen ? "opacity-100 z-30" : "opacity-0 pointer-events-none"
         )} />
       )}
     </>

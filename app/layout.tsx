@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/logo.png"/>
+        <link rel="icon" href="/logo.png" type="image/png"/>
       </head>
       <body className={inter.className}>
         <AuthProvider>
