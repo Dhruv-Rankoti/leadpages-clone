@@ -17,7 +17,26 @@ import { cn } from "@/lib/utils"
 import { Menu, X } from "lucide-react"
 import Logo from "@/components/ui/Logo"
 
-const navItems = [
+type Section = {
+  title: string;
+  isSection: boolean;
+  highlight?: boolean;  // Make highlight optional
+  items: {
+    title: string;
+    href: string;
+    description: string;
+    icon?: string;
+    featured?: boolean;
+    podcastImage?: string;
+    linkStyle?: boolean;
+  }[];
+}
+
+const navItems: {
+  title: string;
+  href: string;
+  children?: Section[];
+}[] = [
   {
     title: "Platform",
     href: "#",
@@ -493,7 +512,7 @@ export default function Header() {
                                         <div className="border-b border-gray-700 pb-2">
                                           <h3 className={cn(
                                             "text-xs font-bold uppercase tracking-wider",
-                                            section.highlight ? "text-white" : "text-gray-400"
+                                            section.highlight ?? false ? "text-white" : "text-gray-400"
                                           )}>
                                             {section.title}
                                           </h3>

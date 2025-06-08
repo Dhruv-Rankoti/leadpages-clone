@@ -12,8 +12,8 @@ type User = {
 
 type AuthContextType = {
   user: User
-  login: (email: string, password: string) => Promise<void>
-  signup: (name: string, email: string, password: string) => Promise<void>
+  login: (email: string) => Promise<void>
+  signup: (name: string, email: string) => Promise<void>
   logout: () => void
   isLoading: boolean
 }
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false)
   }, [])
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string) => {
     setIsLoading(true)
     try {
       // Simulate API call
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string) => {
     setIsLoading(true)
     try {
       // Simulate API call

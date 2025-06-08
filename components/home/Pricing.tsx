@@ -60,7 +60,7 @@ export default function Pricing() {
 				<div className="text-center mb-12">
 					<h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
 					<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-						Choose the plan that's right for your business. All plans include a 14-day free trial.
+						Choose the plan that&apos;s right for your business. All plans include a 14-day free trial.
 					</p>
 				</div>
 
@@ -106,7 +106,7 @@ export default function Pricing() {
 				</div>
 
 				<div className="mt-12 text-center">
-					<p className="text-muted-foreground mb-4">Need a custom plan for your enterprise? We&apos;ve got you covered.</p>
+					<p className="text-muted-foreground mb-4">Need a custom plan for your enterprise? We&apos;ll help you generate more leads</p>
 					<Link href="/contact">
 						<Button variant="link">Contact our sales team</Button>
 					</Link>
