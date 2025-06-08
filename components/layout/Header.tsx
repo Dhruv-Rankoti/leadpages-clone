@@ -475,7 +475,9 @@ export default function Header() {
           "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500",
           isScrolled 
             ? "border-[hsl(268,0%,25%)]" 
-            : "border-transparent hover:border-[hsl(268,0%,25%)]"
+            : mobileMenuOpen 
+              ? "border-[hsl(268,0%,25%)]"
+              : "border-transparent hover:border-[hsl(268,0%,25%)]"
         )}>
           <div className="flex items-center md:gap-0">
             <Link href="/" className="flex items-center">
@@ -773,7 +775,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="container mx-auto">
             <div className={cn(
-              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/90 backdrop-blur-md z-50 md:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
+              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/99 backdrop-blur-md z-50 md:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
               isClosing && "closing"
             )}>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
