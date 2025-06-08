@@ -1,11 +1,18 @@
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export default function Logo({ isScrolled }: { isScrolled?: boolean }) {
   return (
     <div className="flex items-center relative">
       {/* Logo icon */}
       <div className="transition-transform duration-500 z-10 bg-[#0d0714]">
-        <img src="/logo.png" alt="Leadpages" className=" logo-hover w-7 h-7" />
+        <Image
+          src="/logo.png"
+          alt="Leadpages"
+          width={32}
+          height={32}
+          className="logo-hover w-7 h-7"
+        />
       </div>
 
       {/* Container for text with overflow hidden */}

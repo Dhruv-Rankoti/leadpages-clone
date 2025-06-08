@@ -10,9 +10,9 @@ import { AuthProvider } from "@/components/providers/AuthProvider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Leadpages Clone | Create High-Converting Landing Pages",
+  title: "Landing Page Builder for Lead Generation | Leadpages",
   description:
-    "Build high-converting landing pages faster, generate qualified leads, and optimize your marketing efforts—all with one simple solution.",
+    "Create high-converting landing pages with Leadpages drag-and-drop builder.",
 }
 
 export default function RootLayout({
@@ -22,6 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/logo.png"/>
+      </head>
       <body className={inter.className}>
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
