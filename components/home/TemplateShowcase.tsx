@@ -86,10 +86,14 @@ export default function TemplateShowcase() {
 				</div>
 
 				<Tabs defaultValue="all" className="w-full">
-					<div className="flex justify-center mb-8">
-						<TabsList>
+					<div className="flex justify-center mb-8 overflow-x-auto px-6 md:px-8 scrollbar-none">
+						<TabsList className="flex-nowrap mx-auto">
 							{templateCategories.map((category) => (
-								<TabsTrigger key={category.id} value={category.id}>
+								<TabsTrigger 
+									key={category.id} 
+									value={category.id}
+									className="whitespace-nowrap px-4"
+								>
 									{category.label}
 								</TabsTrigger>
 							))}

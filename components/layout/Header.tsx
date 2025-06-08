@@ -14,7 +14,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronRight } from "lucide-react"
 import Logo from "@/components/ui/Logo"
 
 type Section = {
@@ -457,11 +457,7 @@ export default function Header() {
   
   return (
     <>
-      <header 
-        className="sticky top-0 p-[0.625rem] z-50 w-full bg-none transition-colors duration-300"
-        onMouseEnter={() => setIsNavHovered(true)}
-        onMouseLeave={handleHeaderMouseLeave}
-      >
+      <header className="sticky top-0 p-[0.625rem] z-50 w-full bg-none transition-colors duration-300">
         <div className={cn(
           "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500",
           isScrolled 
@@ -618,48 +614,64 @@ export default function Header() {
               </Button>
             </Link>
           </div>
-          <button className="flex items-center md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <button 
+            className="flex items-center md:hidden" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
           </button>
         </div>
+
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
+          <div className="fixed inset-0 top-[4.5rem] bg-[#0d0714] z-50 md:hidden">
+            <div className="p-4 space-y-4">
               {navItems.map((item) => (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className={cn(
-                    "block rounded-md px-3 py-2 text-base font-medium",
-                    pathname === item.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                <div key={item.title} className="border-b border-gray-800 pb-4">
+                  {item.children ? (
+                    <>
+                      <div className="flex items-center justify-between text-white mb-2">
+                        <span className="text-lg font-medium">{item.title}</span>
+                        <ChevronRight className="h-5 w-5" />
+                      </div>
+                      <p className="text-sm text-gray-400">
+                        {item.title === "Platform" && "Create high-converting landing pages"}
+                        {item.title === "Solutions" && "Find the right solution for your needs"}
+                        {item.title === "Templates" && "Start with pre-built templates"}
+                        {item.title === "Resources" && "Learn and grow with our resources"}
+                      </p>
+                    </>
+                  ) : (
+                    <Link 
+                      href={item.href}
+                      className="text-lg font-medium text-white block"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.title}
+                    </Link>
                   )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.title}
-                </Link>
+                </div>
               ))}
-              <div className="pt-4 pb-3 border-t border-border">
-                <Link href="/login">
-                  <Button variant="ghost" className="w-full justify-start">
-                    Log In
-                  </Button>
-                </Link>
-                <Link href="/signup">
-                  <Button className="w-full mt-2">Sign Up Free</Button>
-                </Link>
+              <div className="pt-4 space-y-3">
+                <Button variant="outline" className="w-full justify-center text-white border-gray-700">
+                  Log In
+                </Button>
+                <Button className="w-full justify-center bg-[#C1FF72] text-black hover:bg-[#b1ef62]">
+                  Sign Up Free
+                </Button>
               </div>
             </div>
           </div>
         )}
       </header>
       
-      {/* Blur overlay */}
-      <div className={cn(
-        "fixed inset-0 bg-background/80 backdrop-blur-[6px] transition-all duration-300",
-        isNavHovered ? "opacity-100 z-40" : "opacity-0 pointer-events-none"
-      )} />
+      {/* Blur overlay - Only show on desktop */}
+      {!mobileMenuOpen && (
+        <div className={cn(
+          "fixed inset-0 bg-background/80 backdrop-blur-[6px] transition-all duration-300 hidden md:block",
+          isNavHovered ? "opacity-100 z-40" : "opacity-0 pointer-events-none"
+        )} />
+      )}
     </>
   )
 }

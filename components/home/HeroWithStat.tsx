@@ -34,7 +34,7 @@ export default function HeroWithStat() {
             {companies.concat(companies).map((company, index) => (
               <div 
                 key={`company-${index}`}
-                className={`flex-shrink-0 mx-8 ${company.className}`}
+                className={`flex-shrink-0 mx-4 md:mx-8 ${company.className}`}
               >
                 <Image
                   src={`/companies/${company.name}.svg`}
