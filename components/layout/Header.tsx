@@ -462,7 +462,8 @@ export default function Header() {
   return (
     <>
       <header 
-        className="sticky top-0 p-[0.625rem] z-50 w-full bg-none transition-colors duration-300"
+        className="sticky top-0 p-[0.625rem] z-[60] w-full bg-none transition-colors duration-300 relative"
+        onMouseEnter={() => setIsNavHovered(true)}
         onMouseLeave={() => {
           setIsNavHovered(false)
           if (currentOpenMenu) {
@@ -472,8 +473,8 @@ export default function Header() {
         }}
       >
         <div className={cn(
-          "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500",
-          isScrolled 
+          "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500 relative",
+          isScrolled || isNavHovered
             ? "border-[hsl(268,0%,25%)]" 
             : mobileMenuOpen 
               ? "border-[hsl(268,0%,25%)]"
@@ -858,12 +859,10 @@ export default function Header() {
       </header>
       
       {/* Blur overlay */}
-      {(!mobileMenuOpen && !isNavHovered) ? null : (
-        <div className={cn(
-          "fixed inset-0 bg-background/80 backdrop-blur-[6px] transition-all duration-300",
-          isNavHovered ? "opacity-100 z-40" : mobileMenuOpen ? "opacity-100 z-30" : "opacity-0 pointer-events-none"
-        )} />
-      )}
+      <div className={cn(
+        "fixed inset-0 bg-background/80 blur-overlay z-50",
+        (mobileMenuOpen || isNavHovered) ? "active" : ""
+      )} />
     </>
   )
 }

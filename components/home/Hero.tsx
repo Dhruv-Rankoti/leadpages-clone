@@ -2,26 +2,37 @@
 
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 export default function Hero() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <div className="relative bg-[radial-gradient(ellipse_at_center,_#bcb3fa_0%,_#9585ff_30%,_#0d0714_80%)] text-white">
-      <div className="mx-auto px-4 pt-16 md:pt-24 lg:pt-32 relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6">
+    <div className="relative bg-[radial-gradient(ellipse_at_center,_#bcb3fa_0%,_#9585ff_30%,_#0d0714_80%)] text-white overflow-hidden">
+      <div className="mx-auto px-4 pt-16 md:pt-24 lg:pt-24 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-6">
+          <h1 className={`text-4xl md:text-5xl lg:text-7xl font-bold mb-6 hero-element hero-heading ${isLoaded ? 'animate-in' : ''}`}>
             Powerful Landing Pages
             <br />
             That Convert
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className={`text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto hero-element hero-description ${isLoaded ? 'animate-in' : ''}`}>
             Launch high-converting landing pages faster, generate qualified leads, and optimize your marketing
             efforts—all with one simple solution.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" size="lg" className="text-white border-gray-600 hover:bg-gray-800">
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center hero-element hero-buttons ${isLoaded ? 'animate-in' : ''}`}>
+            <Button variant="outline" size="lg" className="text-white border-gray-600 hover:bg-gray-800 hover:scale-105 transition-all duration-300">
               Watch demo
             </Button>
-            <Button size="lg" className="bg-[#c1ff72] text-black hover:bg-[#a8e55d]">
+            <Button size="lg" className="bg-[#c1ff72] text-black hover:bg-[#a8e55d] hover:scale-105 transition-all duration-300">
               Start my trial
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,16 +52,20 @@ export default function Hero() {
             </Button>
           </div>
         </div>
-        <div className="relative mx-auto max-w-5xl">
-          <div className="rounded-lg overflow-hidden">
-            <Image
-              src="/Hero_page.png?height=600&width=1200"
-              alt="Landing page builder interface"
-              width={1200}
-              height={600}
-              className="w-full h-auto"
-              priority
-            />
+        
+        {/* Hero Image with 3D Drop Animation */}
+        <div className="hero-card-perspective mt-0">
+          <div className="hero-drop-card">
+            <div className="hero-card-content">
+              <Image
+                src="/Hero_page.png"
+                alt="Landing page builder interface"
+                width={1200}
+                height={600}
+                className="w-full h-auto rounded-lg"
+                priority
+              />
+            </div>
           </div>
         </div>
       </div>
