@@ -74,20 +74,20 @@ export default function Hero() {
             Launch high-converting landing pages faster, generate qualified leads, and optimize your marketing
             efforts—all with one simple solution.
           </p>
-          <div className={`flex flex-col sm:flex-row gap-0 justify-center hero-element hero-buttons max-w-[20rem] mx-auto ${isLoaded ? 'animate-in' : ''}`}>
+          <div className={`flex flex-col sm:flex-row gap-2 sm:gap-0 justify-center hero-element hero-buttons max-w-[20rem] mx-auto ${isLoaded ? 'animate-in' : ''}`}>
             <input 
               type="email" 
               name="email" 
               id="email" 
               className="flex-1 text-[#3c3f40] bg-[#ffffffc4] backdrop-blur-md 
-                transition-all duration-250 rounded-md px-5 py-0
+                transition-all duration-250 rounded-md px-5 min-h-[48px]
                 placeholder:text-[#3c3f40] focus:outline-none focus:ring-2 
-                focus:ring-[#c1ff72] focus:bg-white sm:min-w-[12rem]" 
+                focus:ring-[#c1ff72] focus:bg-white sm:min-w-[12rem] leading-[48px]" 
               placeholder="Work email"
             />
             <Button 
               size="lg" 
-              className="bg-[#c1ff72] text-black cursor-pointer hover:bg-[#a8e55d] px-[1rem] py-[1rem]
+              className="bg-[#c1ff72] text-black cursor-pointer hover:bg-[#a8e55d] px-[1rem] min-h-[48px]
                 transition-all duration-250 whitespace-nowrap text-base"
             >
               Start my trial

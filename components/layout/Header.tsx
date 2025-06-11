@@ -471,12 +471,18 @@ export default function Header() {
     <>
       <header 
         className="sticky top-0 p-[0.625rem] z-[60] w-full bg-none transition-colors duration-300 relative"
-        onMouseEnter={() => setIsNavHovered(true)}
+        onMouseEnter={() => {
+          if (window.innerWidth >= 768) { // md breakpoint
+            setIsNavHovered(true)
+          }
+        }}
         onMouseLeave={() => {
-          setIsNavHovered(false)
-          if (currentOpenMenu) {
-            setCurrentOpenMenu(null)
-            document.body.classList.remove('no-scroll')
+          if (window.innerWidth >= 768) {
+            setIsNavHovered(false)
+            if (currentOpenMenu) {
+              setCurrentOpenMenu(null)
+              document.body.classList.remove('no-scroll')
+            }
           }
         }}
       >
@@ -867,7 +873,7 @@ export default function Header() {
       {/* Blur overlay */}
       <div className={cn(
         "fixed inset-0 bg-background/80 blur-overlay z-50",
-        (mobileMenuOpen || isNavHovered) ? "active" : ""
+        ((mobileMenuOpen && window.innerWidth < 768) || (isNavHovered && window.innerWidth >= 768)) ? "active" : ""
       )} />
     </>
   )
