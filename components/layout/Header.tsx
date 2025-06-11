@@ -383,6 +383,7 @@ export default function Header() {
   const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null)
   const [animationClass, setAnimationClass] = useState<string>("")
   const [isClosing, setIsClosing] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -400,6 +401,13 @@ export default function Header() {
       // Cleanup: ensure scroll is enabled when component unmounts
       document.body.classList.remove('no-scroll')
     }
+  }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false)
+    }, 100)
+    return () => clearTimeout(timer)
   }, [])
 
   const handleMenuOpen = (menuTitle: string) => {
@@ -482,11 +490,11 @@ export default function Header() {
         )}>
           <div className="flex items-center md:gap-0">
             <Link href="/" className="flex items-center">
-              <Logo isScrolled={isScrolled} />
+              <Logo isScrolled={isScrolled} isInitialLoad={isInitialLoad} />
             </Link>
             <nav className={cn(
               "hidden md:flex transition-all duration-500 delay-150 ease-out transform",
-              isScrolled ? "-translate-x-[6.5rem]" : "translate-x-0 ml-10"
+              isScrolled ? "-translate-x-[6.5rem]" : "translate-x-0 ml-4"
             )}>
               <NavigationMenu className="transition-all duration-500">
                 <NavigationMenuList>
@@ -602,30 +610,28 @@ export default function Header() {
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <Link href="/login">
-              <Button variant="ghost">Log In</Button>
+              <Button variant="ghost" className="cursor-pointer nav-link-hover">Log in</Button>
             </Link>
             <Link href="/signup">
               <Button className={cn(
-                "border hover:text-black transition-all duration-300 ease-in-out transform",
+                "border hover:text-black transition-all duration-300 ease-in-out transform cursor-pointer",
                 isScrolled 
-                  ? "bg-[#C1FF72] text-black border-[#C1FF72] hover:bg-[#b1ef62] hover:scale-105" 
-                  : "bg-[#CEFF6666] border-[#cfff66c5] hover:bg-[#C1FF72] hover:scale-105"
+                  ? "bg-[#C1FF72] text-black border-[#C1FF72] hover:bg-[#b1ef62]" 
+                  : "bg-[#CEFF6666] border-[#cfff66c5] hover:bg-[#C1FF72]"
               )}>
                 Sign Up Free
-                <svg
+                <svg 
+                  className="stroke-current w-6 h-6 ml-2" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="ml-1 h-4 w-4"
                 >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
+                  <path 
+                    d="M20.002 12h-16M15 17s5-3.682 5-5-5-5-5-5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="1.646"
+                  />
                 </svg>
               </Button>
             </Link>

@@ -3,19 +3,25 @@ import Image from "next/image"
 
 interface LogoProps {
   isScrolled?: boolean
+  isInitialLoad?: boolean
 }
 
-export default function Logo({ isScrolled }: LogoProps) {
+export default function Logo({ isScrolled, isInitialLoad = true }: LogoProps) {
   return (
     <div className="flex items-center relative">
       {/* Logo icon */}
-      <div className="transition-transform duration-500 z-10 bg-[#0d0714]">
+      <div
+        className={cn(
+          "transition-all duration-700 ease-out z-10 bg-[#0d0714]",
+          isInitialLoad ? "scale-0 opacity-0" : "scale-100 opacity-100"
+        )}
+      >
         <Image
           src="/logo.png"
           alt="Leadpages"
           width={32}
           height={32}
-          className="logo-hover w-7 h-7"
+          className="w-7 h-7 transform transition-transform duration-300 hover:scale-105"
         />
       </div>
 
@@ -23,10 +29,12 @@ export default function Logo({ isScrolled }: LogoProps) {
       <div className="overflow-hidden ml-2">
         <span
           className={cn(
-            "text-xl font-semibold transform inline-block",
-            isScrolled
-              ? "transition-all duration-300 ease-in -translate-x-[200%] opacity-0"
-              : "transition-all duration-500 ease-out translate-x-0 opacity-100"
+            "text-xl font-semibold transform inline-block transition-all duration-700",
+            isInitialLoad
+              ? "-translate-x-full opacity-0"
+              : isScrolled
+              ? "-translate-x-[200%] opacity-0"
+              : "translate-x-0 opacity-100"
           )}
         >
           Leadpages

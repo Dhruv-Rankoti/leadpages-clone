@@ -53,6 +53,7 @@
 @layer base {
   body {
     background-color: #0d0714;
+    font-family: 'Poppins', sans-serif;
   }
 }
 
@@ -97,19 +98,33 @@
   transform: rotateX(50deg) scale(0.7) translateY(-30px); /* Base mobile state */
   animation: dropTowardViewer 1.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
   animation-delay: 1.3s;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 -30px 60px rgba(152, 137, 255, 0.8),  /* top */
+    0 10px 30px rgba(152, 137, 255, 0.2),   /* bottom */
+    10px 0 30px rgba(152, 137, 255, 0.2),    /* right */
+    -10px 0 30px rgba(152, 137, 255, 0.2);   /* left */
   overflow: hidden;
 }
 
 @media (min-width: 640px) {
   .hero-drop-card {
     transform: rotateX(50deg) scale(0.8) translateY(-20px);
+    box-shadow:
+      0 -30px 60px rgba(152, 137, 255, 0.8),  /* top */
+      0 10px 30px rgba(152, 137, 255, 0.2),   /* bottom */
+      10px 0 30px rgba(152, 137, 255, 0.2),   /* right */
+      -10px 0 30px rgba(152, 137, 255, 0.2);  /* left */
   }
 }
 
 @media (min-width: 1024px) {
   .hero-drop-card {
     transform: rotateX(50deg) scale(0.9) translateY(-10px);
+    box-shadow:
+      0 -30px 60px rgba(152, 137, 255, 0.8),  /* top */
+      0 10px 30px rgba(152, 137, 255, 0.2),   /* bottom */
+      10px 0 30px rgba(152, 137, 255, 0.2),   /* right */
+      -10px 0 30px rgba(152, 137, 255, 0.2);  /* left */
   }
 }
 
@@ -251,10 +266,14 @@
 
 .hero-heading {
   animation-delay: 0.1s;
+  font-family: 'Poppins', serif;
+  font-weight: 800;
 }
 
 .hero-description {
   animation-delay: 0.4s;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
 }
 
 .hero-buttons {
