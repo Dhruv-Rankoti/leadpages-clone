@@ -384,6 +384,7 @@ export default function Header() {
   const [animationClass, setAnimationClass] = useState<string>("")
   const [isClosing, setIsClosing] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -409,6 +410,17 @@ export default function Header() {
     }, 100)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const checkIsDesktop = () => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024
+    }
+    return false
+  }
 
   const handleMenuOpen = (menuTitle: string) => {
     if (timeoutRef.current) {
@@ -467,27 +479,54 @@ export default function Header() {
     }, 200)
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        // Clean up mobile menu state when switching to desktop
+        setMobileMenuOpen(false)
+        setMobileSubmenu(null)
+      } else {
+        // Clean up desktop hover state when switching to mobile/tablet
+        setIsNavHovered(false)
+        setCurrentOpenMenu(null)
+      }
+      document.body.classList.remove('no-scroll')
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const shouldShowBlur = isMounted && (
+    (mobileMenuOpen && checkIsDesktop() === false) || 
+    (checkIsDesktop() && isNavHovered)
+  )
+
+  const handleMouseEnter = () => {
+    if (checkIsDesktop()) {
+      setIsNavHovered(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (checkIsDesktop()) {
+      setIsNavHovered(false)
+      if (currentOpenMenu) {
+        setCurrentOpenMenu(null)
+        document.body.classList.remove('no-scroll')
+      }
+    }
+  }
+
   return (
     <>
       <header 
         className="sticky top-0 p-[0.625rem] z-[60] w-full bg-none transition-colors duration-300 relative"
-        onMouseEnter={() => {
-          if (window.innerWidth >= 1024) { // lg breakpoint for desktop
-            setIsNavHovered(true)
-          }
-        }}
-        onMouseLeave={() => {
-          if (window.innerWidth >= 1024) {
-            setIsNavHovered(false)
-            if (currentOpenMenu) {
-              setCurrentOpenMenu(null)
-              document.body.classList.remove('no-scroll')
-            }
-          }
-        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className={cn(
-          "mx-auto flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500 relative",
+          "mx-auto flex h-16 items-center justify-between bg-[#0d0714] border rounded-xl py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500 relative",
           isScrolled || isNavHovered
             ? "border-[#404040ab]" 
             : mobileMenuOpen 
@@ -520,7 +559,7 @@ export default function Header() {
                             onMouseLeave={() => handleMenuClose(item.title)}
                           >
                             <div className={cn(
-                              "w-[900px] p-8 rounded-md shadow-lg border border-[hsl(268,0%,25%)] bg-[rgba(13,7,20,0.9)] dropdown-container",
+                              "w-[900px] p-8 rounded-xl shadow-lg border border-[#404040ab] bg-[rgba(13,7,20,0.9)] dropdown-container",
                               getMenuAnimationClass(item.title)
                             )}>
                               <div className="dropdown-content">
@@ -535,7 +574,7 @@ export default function Header() {
                                       item.title === "Solutions" && "col-span-4"
                                     )}>
                                       {section.isSection && section.title && (
-                                        <div className="border-b border-gray-700 pb-2">
+                                        <div className="border-b border-[#404040ab] pb-2">
                                           <h3 className={cn(
                                             "text-xs font-bold uppercase tracking-wider",
                                             section.highlight ?? false ? "text-white" : "text-gray-400"
@@ -555,7 +594,7 @@ export default function Header() {
                                               <Link
                                                 href={child.href}
                                                 className={cn(
-                                                  "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-800/50 focus:bg-gray-800/50 group",
+                                                  "block select-none rounded-xl p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-800/50 focus:bg-gray-800/50 group",
                                                   child.linkStyle && "text-purple-400 hover:text-purple-300"
                                                 )}
                                               >
@@ -622,7 +661,7 @@ export default function Header() {
             </Link>
             <Link href="/signup">
               <Button className={cn(
-                "border hover:text-black transition-all duration-300 ease-in-out transform cursor-pointer",
+                "border hover:text-black rounded-xl transition-all duration-300 ease-in-out transform cursor-pointer h-12",
                 isScrolled 
                   ? "bg-[#C1FF72] text-black border-[#C1FF72] hover:bg-[#b1ef62]" 
                   : "bg-[#CEFF6666] border-[#cfff66c5] hover:bg-[#C1FF72]"
@@ -652,12 +691,25 @@ export default function Header() {
             </Link>
             <Link href="/signup">
               <Button size="sm" className={cn(
-                "border hover:text-black transition-all duration-300 ease-in-out transform cursor-pointer text-sm",
+                "border hover:text-black rounded-xl transition-all duration-300 ease-in-out transform cursor-pointer text-sm h-11",
                 isScrolled 
                   ? "bg-[#C1FF72] text-black border-[#C1FF72] hover:bg-[#b1ef62]" 
                   : "bg-[#CEFF6666] border-[#cfff66c5] hover:bg-[#C1FF72]"
               )}>
                 Sign Up Free
+                <svg 
+                  className="stroke-current w-6 h-6 ml-2" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    d="M20.002 12h-16M15 17s5-3.682 5-5-5-5-5-5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="1.646"
+                  />
+                </svg>
               </Button>
             </Link>
           </div>
@@ -809,7 +861,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="mx-auto max-w-full px-[0.625rem]">
             <div className={cn(
-              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/99 backdrop-blur-md z-50 lg:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
+              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/99 backdrop-blur-md z-50 lg:hidden overflow-y-auto rounded-xl border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
               isClosing && "closing"
             )}>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -817,7 +869,7 @@ export default function Header() {
                 {navItems.map((item, index) => (
                   <div 
                     key={item.title} 
-                    className={cn("nav-item border-b border-gray-800 pb-4 last:border-b-0", isClosing && "closing")}
+                    className={cn("nav-item border-b border-[#404040ab] pb-4 last:border-b-0", isClosing && "closing")}
                     style={{ 
                       animationDelay: isClosing 
                         ? `${(navItems.length - index - 1) * 50}ms` 
@@ -876,14 +928,27 @@ export default function Header() {
 
               {/* Auth buttons only for mobile (hidden on tablet) */}
               <div className={cn(
-                "p-4 pt-6 border-t border-gray-800 bg-[#0d0714]/95 space-y-4 menu-buttons md:hidden",
+                "p-4 pt-6 border-t border-[#404040ab] bg-[#0d0714]/95 space-y-4 menu-buttons md:hidden flex flex-col items-center",
                 isClosing && "closing"
               )}>
-                <Button variant="outline" className="w-full justify-center text-white border-gray-700">
+                <Button variant="outline" className="justify-center text-white border-none cursor-pointer">
                   Log In
                 </Button>
-                <Button className="w-full justify-center bg-[#C1FF72] text-black hover:bg-[#b1ef62]">
+                <Button className="w-full justify-center bg-[#C1FF72] text-black hover:bg-[#b1ef62] cursor-pointer">
                   Sign Up Free
+                  <svg 
+                  className="stroke-current w-6 h-6 ml-1" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    d="M20.002 12h-16M15 17s5-3.682 5-5-5-5-5-5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="1.646"
+                  />
+                </svg>
                 </Button>
               </div>
             </div>
@@ -894,7 +959,7 @@ export default function Header() {
       {/* Blur overlay */}
       <div className={cn(
         "fixed inset-0 bg-background/80 blur-overlay z-50",
-        (mobileMenuOpen || currentOpenMenu) ? "active" : ""
+        shouldShowBlur ? "active" : ""
       )} />
     </>
   )

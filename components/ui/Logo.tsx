@@ -8,7 +8,7 @@ interface LogoProps {
 
 export default function Logo({ isScrolled, isInitialLoad = true }: LogoProps) {
   return (
-    <div className="flex items-center relative">
+    <div className="flex items-center relative group">
       {/* Logo icon */}
       <div
         className={cn(
@@ -21,7 +21,7 @@ export default function Logo({ isScrolled, isInitialLoad = true }: LogoProps) {
           alt="Leadpages"
           width={32}
           height={32}
-          className="w-7 h-7 transform transition-transform duration-300 hover:scale-105"
+          className="w-7 h-7 transform transition-transform duration-300 group-hover:scale-110 group-hover:delay-75 group-hover:ease-out"
         />
       </div>
 

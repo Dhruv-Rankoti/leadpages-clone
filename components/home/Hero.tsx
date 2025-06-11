@@ -80,14 +80,14 @@ export default function Hero() {
               name="email" 
               id="email" 
               className="flex-1 text-[#3c3f40] bg-[#ffffffc4] backdrop-blur-md 
-                transition-all duration-250 rounded-md px-5 min-h-[48px]
-                placeholder:text-[#3c3f40] focus:outline-none focus:ring-2 
+                transition-all duration-250 rounded-xl px-5 min-h-[48px]
+                placeholder:text-[#1c1e1e] focus:outline-none focus:ring-2 
                 focus:ring-[#c1ff72] focus:bg-white sm:min-w-[12rem] leading-[48px]" 
               placeholder="Work email"
             />
             <Button 
               size="lg" 
-              className="bg-[#c1ff72] text-black cursor-pointer hover:bg-[#a8e55d] px-[1rem] min-h-[48px]
+              className="bg-[#c1ff72] rounded-xl text-[#1c1e1e] cursor-pointer hover:bg-[#a8e55d] px-5 min-h-[48px]
                 transition-all duration-250 whitespace-nowrap text-base"
             >
               Start my trial
