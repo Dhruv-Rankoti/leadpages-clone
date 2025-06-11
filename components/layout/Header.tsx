@@ -472,12 +472,12 @@ export default function Header() {
       <header 
         className="sticky top-0 p-[0.625rem] z-[60] w-full bg-none transition-colors duration-300 relative"
         onMouseEnter={() => {
-          if (window.innerWidth >= 768) { // md breakpoint
+          if (window.innerWidth >= 1024) { // lg breakpoint for desktop
             setIsNavHovered(true)
           }
         }}
         onMouseLeave={() => {
-          if (window.innerWidth >= 768) {
+          if (window.innerWidth >= 1024) {
             setIsNavHovered(false)
             if (currentOpenMenu) {
               setCurrentOpenMenu(null)
@@ -487,19 +487,19 @@ export default function Header() {
         }}
       >
         <div className={cn(
-          "container flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500 relative",
+          "mx-auto flex h-16 items-center justify-between bg-[#0d0714] border rounded-md py-1.5 pr-1.5 pl-[1.875rem] gap-3 transition-colors duration-500 relative",
           isScrolled || isNavHovered
-            ? "border-[hsl(268,0%,25%)]" 
+            ? "border-[#404040ab]" 
             : mobileMenuOpen 
-              ? "border-[hsl(268,0%,25%)]"
-              : "border-transparent hover:border-[hsl(268,0%,25%)]"
+              ? "border-[#404040ab]"
+              : "border-transparent hover:border-[#404040ab]"
         )}>
-          <div className="flex items-center md:gap-0">
+          <div className="flex items-center lg:gap-0">
             <Link href="/" className="flex items-center">
               <Logo isScrolled={isScrolled} isInitialLoad={isInitialLoad} />
             </Link>
             <nav className={cn(
-              "hidden md:flex transition-all duration-500 delay-150 ease-out transform",
+              "hidden lg:flex transition-all duration-500 delay-150 ease-out transform",
               isScrolled ? "-translate-x-[6.5rem]" : "translate-x-0 ml-4"
             )}>
               <NavigationMenu className="transition-all duration-500">
@@ -614,7 +614,9 @@ export default function Header() {
               </NavigationMenu>
             </nav>
           </div>
-          <div className="hidden md:flex items-center space-x-4">
+          
+          {/* Desktop Auth Buttons (lg and up) */}
+          <div className="hidden lg:flex items-center space-x-4">
             <Link href="/login">
               <Button variant="ghost" className="cursor-pointer nav-link-hover">Log in</Button>
             </Link>
@@ -642,9 +644,27 @@ export default function Header() {
               </Button>
             </Link>
           </div>
-          {/* Replace the Menu/X icons with custom hamburger */}
+
+          {/* Tablet Auth Buttons (md to lg) */}
+          <div className="hidden md:flex lg:hidden items-center ml-auto space-x-3">
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="cursor-pointer nav-link-hover text-sm">Log in</Button>
+            </Link>
+            <Link href="/signup">
+              <Button size="sm" className={cn(
+                "border hover:text-black transition-all duration-300 ease-in-out transform cursor-pointer text-sm",
+                isScrolled 
+                  ? "bg-[#C1FF72] text-black border-[#C1FF72] hover:bg-[#b1ef62]" 
+                  : "bg-[#CEFF6666] border-[#cfff66c5] hover:bg-[#C1FF72]"
+              )}>
+                Sign Up Free
+              </Button>
+            </Link>
+          </div>
+
+          {/* Hamburger Menu Button (mobile and tablet) */}
           <button 
-            className="flex items-center md:hidden menu-btn"
+            className="flex items-center lg:hidden menu-btn"
             onClick={() => mobileMenuOpen ? handleMobileMenuClose() : setMobileMenuOpen(true)}
           >
             <div className={cn("hamburger-icon", mobileMenuOpen && "active")}>
@@ -785,10 +805,11 @@ export default function Header() {
           }
         `}</style>
 
+        {/* Mobile/Tablet Menu */}
         {mobileMenuOpen && (
-          <div className="container mx-auto">
+          <div className="mx-auto max-w-full px-[0.625rem]">
             <div className={cn(
-              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/99 backdrop-blur-md z-50 md:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
+              "fixed inset-x-[0.625rem] top-[4.5rem] bottom-6 bg-[#0d0714]/99 backdrop-blur-md z-50 lg:hidden overflow-y-auto rounded-md border border-[hsl(268,0%,25%)] flex flex-col mobile-menu-card",
               isClosing && "closing"
             )}>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -853,9 +874,9 @@ export default function Header() {
                 ))}
               </div>
 
-              {/* Auth buttons with animation matching submenu */}
+              {/* Auth buttons only for mobile (hidden on tablet) */}
               <div className={cn(
-                "p-4 pt-6 border-t border-gray-800 bg-[#0d0714]/95 space-y-4 menu-buttons",
+                "p-4 pt-6 border-t border-gray-800 bg-[#0d0714]/95 space-y-4 menu-buttons md:hidden",
                 isClosing && "closing"
               )}>
                 <Button variant="outline" className="w-full justify-center text-white border-gray-700">
@@ -873,7 +894,7 @@ export default function Header() {
       {/* Blur overlay */}
       <div className={cn(
         "fixed inset-0 bg-background/80 blur-overlay z-50",
-        ((mobileMenuOpen && window.innerWidth < 768) || (isNavHovered && window.innerWidth >= 768)) ? "active" : ""
+        (mobileMenuOpen || currentOpenMenu) ? "active" : ""
       )} />
     </>
   )
